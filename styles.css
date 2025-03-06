@@ -1,0 +1,392 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+:root {
+  --primary: #1D428A;
+  --secondary:#DA291C;
+  --background: #3b3b3b;
+  --background-blue: #1D428A;
+  --background-light: #E7ECF3;
+  --background-white: white;
+  --complementary-dark: rgb(52,99,172);
+  --complementary-light: rgb(107,150,207);
+  --font-xs: 10px;
+  --font-sm: 12px;
+  --font-base: 14px;
+  --font-lg: 16px;
+  --font-xl: 18px;
+  --font-2xl: 20px;
+  --font-3xl: 22px;
+
+  --sidebar-width: 350px;
+
+  --normal-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  --blur-filter: blur(8px);
+}
+
+*{
+  font-family: 'inter', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Search Bar*/
+
+bim-text-input#search-input{
+    background-color: var(--background-light) !important;
+}
+bim-text-input#search-input:hover{
+    outline: 2px solid var(--primary) !important;
+  }
+
+.prueba{
+  background-color: var(--background-light) !important;
+}
+
+#app{
+    display: grid;
+    grid-template-columns: var(--sidebar-width) 1fr;
+    grid-template-areas: 'sidebar content';
+    height: 100vh;
+    background-color: white;
+    color:var(--background);
+    margin: 0.1rem;
+}
+
+
+/* General Styles*/
+
+/*En tu hoja de estilos */
+a:link, a:visited, a:active {
+  text-decoration:none;
+}
+
+h2{
+  font-size: var(--font-3xl);
+}
+h3{
+  font-size: var(--font-2xl);
+}
+h4{
+  font-size: var(--font-xl);
+}
+h5{
+  font-size: var(--font-lg);
+}
+
+button {
+  padding: 8px 15px;
+  cursor: pointer;
+  height: 40px;
+  font-size: var(--font-base);
+  background-color:transparent;
+  color:var(--primary);
+  border-radius: 10px;
+  border: none;
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+}
+
+button:hover {
+  background-color: var(--complementary-dark);
+}
+
+.button-main {
+  padding: 8px 15px;
+  cursor: pointer;
+  height: 60px;
+  font-size: var(--font-3xl);
+  background-color:transparent;
+  color: white;
+  border-radius: 10px;
+  border: none;
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+}
+
+.button-main:hover {
+  background-color: var(--complementary-light);
+}
+
+.page{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Sidebar Styles*/
+#sidebar{
+  height: 97vh;
+  background-color: var(--background-blue);
+  padding: 25px 25px 0px 25px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 40px;
+  transition: width 0.5s;
+}
+
+#sidebar.oculto {
+  width: 75px;
+  padding: 0px;
+}
+
+
+#nav-buttons{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  text-decoration: none; 
+}
+#nav-buttons li {
+  list-style-type: none;
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+}
+#nav-buttons li:hover {
+  background-color: var(--complementary-light);
+}
+
+/* Content Styles*/
+  
+#content{
+  background-color: var( --background-white);  
+}
+
+header{
+  padding: 30px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.project-card {
+  background-color: var(--background-light);
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--primary);
+  padding: 10px;
+  margin: 0 auto;
+  min-width: 350px;
+}
+
+.project-card:hover{
+  outline: 2px solid var(--primary);
+}
+
+.card-icon{
+  color: white;
+  padding: 12px; 
+  border-radius: 8px; 
+  aspect-ratio: 1;
+}
+
+.card-header{
+  display: flex;
+  column-gap: 20px;
+  padding: 15px 20px;
+  align-items: center;
+  justify-content: start;
+  border-bottom: 2px solid #3b3c3f;
+  height: 60px;
+}
+
+.card-content {
+  padding: 30px 20px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  align-items: start;
+}
+
+.card-property {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#project-list{
+  display: grid;
+  padding: 20px 40px;
+  gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+}
+  /* Form Styles*/
+  
+  dialog {
+    background-color: transparent; 
+    border: none;
+      margin: auto;
+  }
+  
+  dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(3px);
+  }
+  
+  form {
+    width: 450px; 
+    border-radius: 10px; 
+    background-color: var(--background-blue);
+    color: white;
+  }
+  
+  form h2 {
+    padding: 20px; 
+    border-bottom: 2px solid var(--complementary-light);
+  }
+  
+  form .input-list {
+    display: flex; 
+    flex-direction: column; 
+    padding: 20px; 
+    row-gap: 25px;
+  }
+  
+  form .form-field-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    font-size: var(--font-base);
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: rgba(150,150,150,1);
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+  }
+  
+  input, textarea, select {
+    color: white; 
+      background-color: var(--complementary-light);
+    padding: 15px; 
+    border-radius: 8px; 
+    border: none;
+    font-size: var(--font-base);
+  }
+  
+  input:focus, textarea:focus, select:focus {
+    outline: 2px solid var(--primary);
+  }
+
+  /* Project details page */
+  .dashboard-card {
+    background-color: var(--background-light);
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    padding: 20px;
+    width: 100%; 
+    max-width: 800px; 
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column; 
+  }
+
+  #project-details > .main-page-content {
+    display: grid;
+    padding: 20px 40px;
+    gap: 30px;
+    grid-template-columns: 475px 1fr;
+    height: 100%;
+  }
+  
+  /* TO DO */
+  .to-do-item {
+    padding: 20px;
+    background-color: var(--complementary-light);
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  
+  .to-do-item:hover {
+    background-color: var(--primary);
+  }
+  
+  .to-do {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .to-do-content {
+    background-color: var(--background-light);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: auto;
+    color: var(--primary);
+    text-align: center;
+    justify-content: space-between;
+  }
+  
+  .to-do-content h2 {
+    margin-bottom: 20px;
+  }
+
+  .to-do-content .info {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+  }
+
+  .to-do-content .info p {
+    margin-bottom: 5px;
+    text-align: left;
+    justify-content: space-between;
+  }
+
+  .label {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .label-name {
+    font-weight: bold;
+    margin-right: 20px; 
+  }
+  
+  .label-value {
+    margin-left: auto;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 10px;
+  }
+
+  /* Visor */
+  #viewer-container {
+    width: 100%;
+    height: 95vh;
+    position: relative;
+    overflow: hidden; /* Evita que el canvas se salga */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+  }
+
+  /* TO-DO Component*/
+  bim-option{
+    cursor: pointer;
+    padding: 4px;
+  }
+
