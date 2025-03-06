@@ -1,8 +1,7 @@
 import resolve from '@rollup/plugin-node-resolve';
 
 export default{
-    //input: 'index.js', //Error en carga de la libreria de DXF
-    input: './modules/model-viewer.js',
+    input: 'index.js',
     output: [
         {
             format: 'esm',
