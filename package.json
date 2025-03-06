@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "rollup -c",
+    "build": "vite",
     "watch": "rollup -c -w",
     "dev": "vite"
   },
