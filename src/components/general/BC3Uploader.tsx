@@ -21,14 +21,20 @@ export function BC3Uploader() {
     reader.onload = (e) => {
       const content = e.target?.result as string
       if (content) {
-        const data = BC3Parser.parse(content)
-        setBc3Data(data)
+        try {
+          console.log("Procesando archivo BC3:", file.name)
+          const data = BC3Parser.parse(content)
+          console.log("Datos BC3 procesados:", data)
+          setBc3Data(data)
+        } catch (error) {
+          console.error("Error al procesar el archivo BC3:", error)
+        }
       }
       setIsLoading(false)
     }
 
-    reader.onerror = () => {
-      console.error("Error al leer el archivo")
+    reader.onerror = (error) => {
+      console.error("Error al leer el archivo:", error)
       setIsLoading(false)
     }
 
