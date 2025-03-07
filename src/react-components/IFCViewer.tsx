@@ -93,13 +93,40 @@ export function IFCViewer(props: Props) {
       // Asegurarse de que los eventos estén configurados correctamente
       try {
         if (highlighter.events?.select) {
+          // Eliminar cualquier listener anterior para evitar duplicados
+          highlighter.events.select.onHighlight.clear()
+
+          // Añadir el nuevo listener
           highlighter.events.select.onHighlight.add((selection) => {
             console.log("Objeto seleccionado:", selection)
             if (selection.length > 0) {
               const objectId = selection[0].id
-              console.log("ID del objeto:", objectId)
+              console.log("ID del objeto seleccionado:", objectId)
+
+              // Extraer información adicional si está disponible
+              let fragmentID = null
+              let modelID = null
+
+              try {
+                if (selection[0].fragment) {
+                  fragmentID = selection[0].fragment.id
+                }
+                if (selection[0].model) {
+                  modelID = selection[0].model.id
+                }
+
+                console.log("Información adicional:", {
+                  fragmentID,
+                  modelID,
+                  rawSelection: selection[0],
+                })
+              } catch (error) {
+                console.warn("No se pudo extraer información adicional:", error)
+              }
+
               setSelectedObjectId(objectId)
             } else {
+              console.log("Selección vacía")
               setSelectedObjectId(null)
             }
           })
