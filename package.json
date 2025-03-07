@@ -5,23 +5,13 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "vite",
+    "build": "vite build",
+    "start": "vite preview",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "author": "INECO",
   "license": "MIT",
-  "devDependencies": {
-    "@rollup/plugin-node-resolve": "^13.2.1",
-    "@types/react": "18.2.31",
-    "@types/react-dom": "18.2.14",
-    "@types/three": "0.156.0",
-    "@vitejs/plugin-react": "4.0.3",
-    "rollup": "^2.70.2",
-    "typescript": "^5.5.4",
-    "vite": "^4.5.9"
-  },
   "dependencies": {
     "@thatopen/components": "^2.4.4",
     "@thatopen/components-front": "^2.4.4",
@@ -35,5 +25,16 @@
     "three": "^0.160.1",
     "uuid": "^10.0.0",
     "web-ifc": "^0.0.66"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^13.2.1",
+    "@types/react": "18.2.31",
+    "@types/react-dom": "18.2.14",
+    "@types/three": "0.156.0",
+    "@vitejs/plugin-react": "4.0.3",
+    "rollup": "^2.70.2",
+    "typescript": "^5.5.4",
+    "vite": "^4.5.9"
   }
 }
+
