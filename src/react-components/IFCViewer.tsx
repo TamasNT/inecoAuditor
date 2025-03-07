@@ -13,7 +13,7 @@ import { ViewerPanel } from '../bim-components/ViewerPanel'
 
 import { AppManager } from '../bim-components'
 import ViewerToolbar from '../components/Toolbars/ViewerToolbar';
-import ProcessModel from '../components/General/ProcessModel'
+import ProcessModel from '../components/general/ProcessModel'
 import EPP from '../components/Panels/ElementPropertyPanel';
 import WP from '../components/Panels/WorldPanel'
 import TP from '../components/Panels/TreePanel'
