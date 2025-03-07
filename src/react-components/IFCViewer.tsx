@@ -29,15 +29,6 @@ interface Props {
 
 // Modificar la función IFCViewer para envolver con BC3Provider
 export function IFCViewer(props: Props) {
-  return (
-    <BC3Provider>
-      <IFCViewerInner {...props} />
-    </BC3Provider>
-  )
-}
-
-// Crear una nueva función IFCViewerInner que contenga el código original
-function IFCViewerInner(props: Props) {
   const components: OBC.Components = props.components
   const viewerPanelRef = React.useRef<ViewerPanel | null>(null)
 
@@ -48,10 +39,9 @@ function IFCViewerInner(props: Props) {
   const [showSecondWorld, setShowSecondWorld] = React.useState(false)
   const [uiInitialized, setUIInitialized] = React.useState(false)
   const setupUIRef = React.useRef<(() => void) | null>(null)
-  const [selectedObjectId, setSelectedObjectId] = React.useState<string | null>(null)
 
-  // Añadir acceso al contexto BC3
-  //const { setSelectedObjectId } = useBC3()
+  // Añadir estado para el ID del objeto seleccionado
+  const [selectedObjectId, setSelectedObjectId] = React.useState<string | null>(null)
 
   let fragmentModel: FragmentsGroup | undefined
   const appManager = components.get(AppManager)
@@ -94,7 +84,7 @@ function IFCViewerInner(props: Props) {
         world,
       })
 
-      // Añadir evento para capturar la selección de objetos
+      // Modificar para capturar el ID del objeto seleccionado
       highlighter.events.select.onHighlight.add((selection) => {
         if (selection.length > 0) {
           const objectId = selection[0].id
@@ -218,35 +208,37 @@ function IFCViewerInner(props: Props) {
     }
   }, [mainWorld, uiInitialized, initializeUI])
 
-  // Modificar el return para incluir los componentes BC3
+  // Modificar el return para incluir el componente BC3Panel
   return (
-    <div className="ifc-bc3-container">
-      <div
-        id="viewer-container"
-        className="dashboard-card"
-        style={{
-          position: "relative",
-          width: "100%",
-          height: "95vh",
-          minWidth: 0,
-          maxWidth: 800,
-        }}
-      ></div>
-      <BC3Panel selectedObjectId={selectedObjectId} />
-      <style jsx>{`
-        .ifc-bc3-container {
-          display: flex;
-          width: 100%;
-          flex-wrap: wrap;
-        }
-        
-        @media (max-width: 1200px) {
+    <BC3Provider>
+      <div className="ifc-bc3-container">
+        <div
+          id="viewer-container"
+          className="dashboard-card"
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "95vh",
+            minWidth: 0,
+            maxWidth: 800,
+          }}
+        ></div>
+        <BC3Panel selectedObjectId={selectedObjectId} />
+        <style jsx>{`
           .ifc-bc3-container {
-            flex-direction: column;
+            display: flex;
+            width: 100%;
+            flex-wrap: wrap;
           }
-        }
-      `}</style>
-    </div>
+
+          @media (max-width: 1200px) {
+            .ifc-bc3-container {
+              flex-direction: column;
+            }
+          }
+        `}</style>
+      </div>
+    </BC3Provider>
   )
 }
 
