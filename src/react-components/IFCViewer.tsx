@@ -1,8 +1,4 @@
 "use client"
-
-// Importar los componentes y clases BC3
-import { BC3Provider } from "../classes/BC3Context"
-import { BC3Panel } from "../components/general/BC3Panel"
 import * as React from "react"
 import * as OBC from "@thatopen/components"
 import * as OBCF from "@thatopen/components-front"
@@ -215,8 +211,47 @@ export function IFCViewer(props: Props) {
 
   // Modificar el return para incluir el componente BC3Panel
   return (
-    <BC3Provider>
-      <div className="ifc-bc3-container">
+    <div className="viewer-container">
+      {/* Panel izquierdo para BC3 */}
+      <div className="left-panel">
+        <div className="bc3-uploader">
+          <h3>Cargar archivo BC3</h3>
+          <div className="upload-area">
+            <input
+              type="file"
+              accept=".bc3"
+              onChange={(e) => {
+                const file = e.target.files?.[0]
+                if (file) {
+                  // Aquí procesamos el archivo BC3
+                  console.log("Archivo BC3 seleccionado:", file.name)
+                }
+              }}
+              id="bc3-file"
+            />
+            <label htmlFor="bc3-file">
+              <div className="upload-button">
+                <span className="icon">📁</span>
+                <span>Seleccionar archivo BC3</span>
+              </div>
+            </label>
+          </div>
+        </div>
+        {/* Aquí irá la información BC3 cuando se seleccione un objeto */}
+        <div className="bc3-info">
+          {selectedObjectId ? (
+            <div>
+              <h4>Información del objeto: {selectedObjectId}</h4>
+              {/* Aquí mostraremos la información BC3 */}
+            </div>
+          ) : (
+            <p>Seleccione un objeto para ver su información BC3</p>
+          )}
+        </div>
+      </div>
+
+      {/* Visor IFC */}
+      <div className="viewer-main">
         <div
           id="viewer-container"
           className="dashboard-card"
@@ -225,25 +260,94 @@ export function IFCViewer(props: Props) {
             width: "100%",
             height: "95vh",
             minWidth: 0,
-            maxWidth: 800,
+            maxWidth: "none",
           }}
         ></div>
-        <BC3Panel selectedObjectId={selectedObjectId} />
-        <style jsx>{`
-          .ifc-bc3-container {
-            display: flex;
-            width: 100%;
-            flex-wrap: wrap;
-          }
-
-          @media (max-width: 1200px) {
-            .ifc-bc3-container {
-              flex-direction: column;
-            }
-          }
-        `}</style>
       </div>
-    </BC3Provider>
+
+      <style jsx>{`
+        .viewer-container {
+          display: flex;
+          width: 100%;
+          height: 100%;
+          gap: 16px;
+          padding: 16px;
+        }
+
+        .left-panel {
+          width: 300px;
+          min-width: 300px;
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+
+        .viewer-main {
+          flex: 1;
+          min-width: 0;
+        }
+
+        .bc3-uploader {
+          border-bottom: 1px solid #eee;
+          padding-bottom: 16px;
+        }
+
+        .bc3-uploader h3 {
+          margin: 0 0 16px 0;
+          font-size: 16px;
+          color: #333;
+        }
+
+        .upload-area {
+          position: relative;
+        }
+
+        .upload-area input[type="file"] {
+          display: none;
+        }
+
+        .upload-button {
+          border: 2px dashed #ccc;
+          border-radius: 8px;
+          padding: 20px;
+          text-align: center;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .upload-button:hover {
+          border-color: #999;
+          background: #f9f9f9;
+        }
+
+        .icon {
+          font-size: 24px;
+          display: block;
+          margin-bottom: 8px;
+        }
+
+        .bc3-info {
+          flex: 1;
+          overflow-y: auto;
+        }
+
+        .bc3-info h4 {
+          margin: 0 0 16px 0;
+          font-size: 14px;
+          color: #333;
+        }
+
+        .bc3-info p {
+          color: #666;
+          text-align: center;
+          padding: 20px;
+        }
+      `}</style>
+    </div>
   )
 }
 
