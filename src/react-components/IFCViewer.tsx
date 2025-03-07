@@ -4,23 +4,30 @@
 import { BC3Provider, useBC3 } from "../classes/BC3Context"
 import { BC3Uploader } from "../components/general/BC3Uploader"
 import { BC3ObjectInfo } from "../components/general/BC3ObjectInfo"
-import React from "react"
-import { ViewerPanel } from "@bim-viewer/core"
-import type { FragmentsGroup } from "@bim-viewer/fragments"
+import * as React from "react"
+import * as OBC from "@thatopen/components"
+import * as OBCF from "@thatopen/components-front"
+import * as BUI from "@thatopen/ui"
 import * as THREE from "three"
-import { AppManager, TodoCreator, ProcessModel } from "../classes/AppManager"
-import { createWorld } from "../classes/WorldCreator"
-import * as OBC from "@bim-viewer/core"
-import { ViewerToolbar } from "../components/ViewerToolbar"
-import { ElementPropertyPanel as EPP } from "../components/ElementPropertyPanel"
-import { WorldPanel as WP } from "../components/WorldPanel"
-import { TreePanel as TP } from "../components/TreePanel"
-import { SplitView as SV } from "../components/SplitView"
-import * as BUI from "@bim-viewer/ui"
-import { Highlighter as OBCBFHighlighter } from "@bim-viewer/highlighter"
+import type { FragmentsGroup } from "@thatopen/fragments"
+import { createWorld } from "../components/functions/worlds-factory"
+
+//TODOCREATOR
+import { TodoCreator } from "../bim-components/TodoCreator"
+import { ViewerPanel } from "../bim-components/ViewerPanel"
+
+import { AppManager } from "../bim-components"
+import ViewerToolbar from "../components/Toolbars/ViewerToolbar"
+import ProcessModel from "../components/general/ProcessModel"
+import EPP from "../components/Panels/ElementPropertyPanel"
+import WP from "../components/Panels/WorldPanel"
+import TP from "../components/Panels/TreePanel"
+import SV from "../components/Viewer/SplitView"
+
 interface Props {
   components: OBC.Components
 }
+
 // Modificar la función IFCViewer para envolver con BC3Provider
 export function IFCViewer(props: Props) {
   return (
@@ -32,7 +39,6 @@ export function IFCViewer(props: Props) {
 
 // Crear una nueva función IFCViewerInner que contenga el código original
 function IFCViewerInner(props: Props) {
-  // Copiar todo el contenido original de IFCViewer aquí
   const components: OBC.Components = props.components
   const viewerPanelRef = React.useRef<ViewerPanel | null>(null)
 
@@ -76,7 +82,7 @@ function IFCViewerInner(props: Props) {
         fragmentModel = model
       })
 
-      const highlighter = components.get(OBCBFHighlighter)
+      const highlighter = components.get(OBCF.Highlighter)
       highlighter.setup({
         selectName: "selectEvent",
         selectEnabled: true,
