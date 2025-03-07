@@ -3,6 +3,88 @@
 import * as React from "react"
 import { useBC3 } from "../../classes/BC3Context"
 
+function normalizeId(id: string): string {
+  return id.toLowerCase().replace(/[^a-z0-9]/g, "")
+}
+
+function findRelatedMeasurements(bc3Data: any, objectId: string) {
+  // Intentar coincidencia exacta primero
+  if (bc3Data.formattedMeasurements[objectId]) {
+    console.log("Coincidencia exacta encontrada para:", objectId)
+    return {
+      measurements: bc3Data.formattedMeasurements[objectId],
+      matchType: "exact",
+      matchId: objectId,
+    }
+  }
+
+  // Normalizar el ID del objeto para búsqueda
+  const normalizedObjectId = normalizeId(objectId)
+  console.log("ID normalizado para búsqueda:", normalizedObjectId)
+
+  // Buscar coincidencias parciales
+  for (const [id, measurements] of Object.entries(bc3Data.formattedMeasurements)) {
+    const normalizedId = normalizeId(id)
+
+    // Verificar si el ID normalizado contiene o está contenido en el ID del objeto
+    if (normalizedId.includes(normalizedObjectId) || normalizedObjectId.includes(normalizedId)) {
+      console.log("Coincidencia parcial encontrada:", id)
+      return {
+        measurements: measurements as any[],
+        matchType: "partial",
+        matchId: id,
+      }
+    }
+
+    // Buscar en los códigos de las mediciones
+    for (const measurement of measurements as any[]) {
+      const codigoPadre = measurement["Codigo padre"]
+      const codigoHijo = measurement["Codigo hijo"]
+
+      if (codigoPadre && normalizeId(codigoPadre).includes(normalizedObjectId)) {
+        console.log("Coincidencia en código padre:", codigoPadre)
+        return {
+          measurements: measurements as any[],
+          matchType: "code",
+          matchId: id,
+        }
+      }
+
+      if (codigoHijo && normalizeId(codigoHijo).includes(normalizedObjectId)) {
+        console.log("Coincidencia en código hijo:", codigoHijo)
+        return {
+          measurements: measurements as any[],
+          matchType: "code",
+          matchId: id,
+        }
+      }
+    }
+  }
+
+  // Buscar por similitud de caracteres (al menos 3 caracteres en común)
+  if (normalizedObjectId.length >= 3) {
+    for (const [id, measurements] of Object.entries(bc3Data.formattedMeasurements)) {
+      const normalizedId = normalizeId(id)
+
+      // Buscar subcadenas comunes de al menos 3 caracteres
+      for (let i = 0; i <= normalizedObjectId.length - 3; i++) {
+        const subStr = normalizedObjectId.substring(i, i + 3)
+        if (normalizedId.includes(subStr)) {
+          console.log("Coincidencia por subcadena:", subStr, "en ID:", id)
+          return {
+            measurements: measurements as any[],
+            matchType: "substring",
+            matchId: id,
+          }
+        }
+      }
+    }
+  }
+
+  console.log("No se encontraron coincidencias para:", objectId)
+  return { measurements: [], matchType: "none", matchId: null }
+}
+
 export function BC3ObjectInfo() {
   const { bc3Data, selectedObjectId } = useBC3()
   const [activeTab, setActiveTab] = React.useState("all")
@@ -92,20 +174,38 @@ export function BC3ObjectInfo() {
     )
   }
 
-  const measurements = bc3Data.formattedMeasurements[selectedObjectId] || []
+  const { measurements, matchType, matchId } = findRelatedMeasurements(bc3Data, selectedObjectId)
 
   if (measurements.length === 0) {
     return (
       <div className="bc3-object-info">
         <h3>Información BC3 - ID: {selectedObjectId}</h3>
-        <p className="bc3-empty-message">No hay mediciones para este objeto</p>
+        <p className="bc3-empty-message">No se encontraron mediciones para este objeto</p>
+        <div className="bc3-search-info">
+          <p>Sugerencias:</p>
+          <ul>
+            <li>Verifica que el ID del objeto coincida con algún identificador en el archivo BC3</li>
+            <li>El archivo BC3 podría usar un sistema de identificación diferente</li>
+            <li>Prueba seleccionando diferentes objetos</li>
+          </ul>
+        </div>
       </div>
     )
   }
 
   return (
     <div className="bc3-object-info">
-      <h3>Información BC3 - ID: {selectedObjectId}</h3>
+      <h3>
+        Información BC3 - ID: {selectedObjectId}
+        {matchType !== "exact" && (
+          <span className="bc3-match-info">
+            {matchType === "partial" && " (coincidencia parcial)"}
+            {matchType === "code" && " (coincidencia por código)"}
+            {matchType === "substring" && " (coincidencia por similitud)"}
+            {matchId && ` → ${matchId}`}
+          </span>
+        )}
+      </h3>
 
       <div className="bc3-tabs">
         <button className={`bc3-tab ${activeTab === "all" ? "active" : ""}`} onClick={() => setActiveTab("all")}>
@@ -239,6 +339,28 @@ export function BC3ObjectInfo() {
           position: sticky;
           top: 0;
           z-index: 1;
+        }
+        
+        .bc3-match-info {
+          font-size: 11px;
+          font-weight: normal;
+          color: #666;
+          margin-left: 5px;
+        }
+        
+        .bc3-search-info {
+          margin-top: 10px;
+          font-size: 11px;
+          color: #666;
+        }
+        
+        .bc3-search-info ul {
+          padding-left: 20px;
+          margin-top: 5px;
+        }
+        
+        .bc3-search-info li {
+          margin-bottom: 3px;
         }
       `}</style>
     </div>
