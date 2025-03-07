@@ -69,6 +69,11 @@ export function IFCViewer(props: Props) {
       })
 
       const highlighter = components.get(OBCF.Highlighter)
+      if (!highlighter) {
+        console.error("No se pudo obtener el highlighter")
+        return
+      }
+
       highlighter.setup({
         selectName: "selectEvent",
         selectEnabled: true,
@@ -80,19 +85,20 @@ export function IFCViewer(props: Props) {
         world,
       })
 
-      // Modificar para capturar el ID del objeto seleccionado
-      // Verificar que highlighter.events y highlighter.events.select existan antes de acceder a onHighlight
-      if (highlighter.events && highlighter.events.select && highlighter.events.select.onHighlight) {
+      // Asegurarse de que los eventos estén configurados correctamente
+      if (highlighter.events?.select) {
         highlighter.events.select.onHighlight.add((selection) => {
+          console.log("Objeto seleccionado:", selection)
           if (selection.length > 0) {
             const objectId = selection[0].id
+            console.log("ID del objeto:", objectId)
             setSelectedObjectId(objectId)
           } else {
             setSelectedObjectId(null)
           }
         })
       } else {
-        console.warn("No se pudo acceder a highlighter.events.select.onHighlight")
+        console.warn("No se pudo acceder a highlighter.events.select")
       }
 
       const todoCreator = components.get(TodoCreator)
