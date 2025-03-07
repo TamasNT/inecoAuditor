@@ -1,9 +1,8 @@
 "use client"
 
 // Importar los componentes y clases BC3
-import { BC3Provider, useBC3 } from "../classes/BC3Context"
-import { BC3Uploader } from "../components/general/BC3Uploader"
-import { BC3ObjectInfo } from "../components/general/BC3ObjectInfo"
+import { BC3Provider } from "../classes/BC3Context"
+import { BC3Panel } from "../components/general/BC3Panel"
 import * as React from "react"
 import * as OBC from "@thatopen/components"
 import * as OBCF from "@thatopen/components-front"
@@ -49,9 +48,10 @@ function IFCViewerInner(props: Props) {
   const [showSecondWorld, setShowSecondWorld] = React.useState(false)
   const [uiInitialized, setUIInitialized] = React.useState(false)
   const setupUIRef = React.useRef<(() => void) | null>(null)
+  const [selectedObjectId, setSelectedObjectId] = React.useState<string | null>(null)
 
   // Añadir acceso al contexto BC3
-  const { setSelectedObjectId } = useBC3()
+  //const { setSelectedObjectId } = useBC3()
 
   let fragmentModel: FragmentsGroup | undefined
   const appManager = components.get(AppManager)
@@ -232,31 +232,17 @@ function IFCViewerInner(props: Props) {
           maxWidth: 800,
         }}
       ></div>
-      <div className="bc3-sidebar">
-        <BC3Uploader />
-        <BC3ObjectInfo />
-      </div>
+      <BC3Panel selectedObjectId={selectedObjectId} />
       <style jsx>{`
         .ifc-bc3-container {
           display: flex;
           width: 100%;
-          gap: 16px;
-        }
-        
-        .bc3-sidebar {
-          width: 350px;
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
+          flex-wrap: wrap;
         }
         
         @media (max-width: 1200px) {
           .ifc-bc3-container {
             flex-direction: column;
-          }
-          
-          .bc3-sidebar {
-            width: 100%;
           }
         }
       `}</style>
