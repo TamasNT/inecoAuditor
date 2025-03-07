@@ -85,14 +85,19 @@ export function IFCViewer(props: Props) {
       })
 
       // Modificar para capturar el ID del objeto seleccionado
-      highlighter.events.select.onHighlight.add((selection) => {
-        if (selection.length > 0) {
-          const objectId = selection[0].id
-          setSelectedObjectId(objectId)
-        } else {
-          setSelectedObjectId(null)
-        }
-      })
+      // Verificar que highlighter.events y highlighter.events.select existan antes de acceder a onHighlight
+      if (highlighter.events && highlighter.events.select && highlighter.events.select.onHighlight) {
+        highlighter.events.select.onHighlight.add((selection) => {
+          if (selection.length > 0) {
+            const objectId = selection[0].id
+            setSelectedObjectId(objectId)
+          } else {
+            setSelectedObjectId(null)
+          }
+        })
+      } else {
+        console.warn("No se pudo acceder a highlighter.events.select.onHighlight")
+      }
 
       const todoCreator = components.get(TodoCreator)
       todoCreator.world = world
