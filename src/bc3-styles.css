@@ -1,0 +1,141 @@
+/* Estilos para los componentes BC3 */
+.dashboard-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.bc3-uploader {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.bc3-uploader h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.bc3-uploader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bc3-file-label {
+  cursor: pointer;
+  width: 100%;
+}
+
+.bc3-file-drop-area {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.bc3-file-drop-area:hover {
+  background-color: #f9f9f9;
+}
+
+.bc3-file-icon {
+  font-size: 24px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.bc3-file-text {
+  color: #666;
+}
+
+.bc3-file-input {
+  display: none;
+}
+
+.bc3-loading {
+  margin-top: 8px;
+  color: #666;
+}
+
+.bc3-object-info {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+}
+
+.bc3-empty-message {
+  color: #666;
+  text-align: center;
+  padding: 24px 0;
+}
+
+.bc3-tabs {
+  display: flex;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 16px;
+}
+
+.bc3-tab {
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #666;
+  border-bottom: 2px solid transparent;
+}
+
+.bc3-tab.active {
+  color: #0066cc;
+  border-bottom-color: #0066cc;
+}
+
+.bc3-table-container {
+  overflow-x: auto;
+}
+
+.bc3-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bc3-table th,
+.bc3-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.bc3-table th {
+  background-color: #f9f9f9;
+  font-weight: 500;
+}
+
+.ifc-bc3-container {
+  display: flex;
+  width: 100%;
+  gap: 16px;
+}
+
+.bc3-sidebar {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (max-width: 1200px) {
+  .ifc-bc3-container {
+    flex-direction: column;
+  }
+
+  .bc3-sidebar {
+    width: 100%;
+  }
+}
+
