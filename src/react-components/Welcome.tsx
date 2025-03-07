@@ -4,7 +4,7 @@ import * as OBC from "@thatopen/components";
 import { AppManager } from "../bim-components/AppManager";
 import { auth } from "../firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import login from "../components/general/Login";
+import login from "../components/General/Login";
 
 export const Welcome: React.FC = () => {
     React.useEffect(() => {
