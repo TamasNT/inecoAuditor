@@ -31,6 +31,10 @@ export interface BC3Data {
 }
 
 export class BC3Parser {
+  static normalizeId(id: string): string {
+    return id.toLowerCase().replace(/[^a-z0-9]/g, "")
+  }
+
   static parse(content: string): BC3Data {
     const lineas = content.split("\n")
 
@@ -125,7 +129,14 @@ export class BC3Parser {
   ): Record<string, BC3Measurement[]> {
     const result = JSON.parse(JSON.stringify(measurements)) as Record<string, BC3Measurement[]>
 
+    // Crear un mapa de IDs normalizados para facilitar la búsqueda
+    const normalizedMap: Record<string, string> = {}
+
     for (const key in result) {
+      // Normalizar el ID original y guardarlo en el mapa
+      const normalizedKey = this.normalizeId(key)
+      normalizedMap[normalizedKey] = key
+
       for (const dictionary of result[key]) {
         const padre = dictionary["Codigo padre"]
         const hijo = dictionary["Codigo hijo"]
@@ -139,6 +150,15 @@ export class BC3Parser {
           dictionary["Unidad"] = conceptsDict[hijo].unidad
           dictionary["Precio"] = conceptsDict[hijo].precio
         }
+      }
+    }
+
+    // Añadir entradas adicionales con IDs normalizados para facilitar la búsqueda
+    for (const normalizedKey in normalizedMap) {
+      const originalKey = normalizedMap[normalizedKey]
+      if (normalizedKey !== originalKey && !result[normalizedKey]) {
+        // Solo añadir si no existe ya una entrada con ese ID normalizado
+        result[normalizedKey] = result[originalKey]
       }
     }
 
