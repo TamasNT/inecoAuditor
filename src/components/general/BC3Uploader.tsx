@@ -8,6 +8,8 @@ export function BC3Uploader() {
   const { setBc3Data } = useBC3()
   const [isLoading, setIsLoading] = React.useState(false)
   const [fileName, setFileName] = React.useState<string | null>(null)
+  const [isUploaded, setIsUploaded] = React.useState(false)
+  const [showUploader, setShowUploader] = React.useState(true)
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
@@ -26,6 +28,8 @@ export function BC3Uploader() {
           const data = BC3Parser.parse(content)
           console.log("Datos BC3 procesados:", data)
           setBc3Data(data)
+          setIsUploaded(true)
+          setShowUploader(false) // Ocultar el uploader después de cargar
         } catch (error) {
           console.error("Error al procesar el archivo BC3:", error)
         }
@@ -41,9 +45,64 @@ export function BC3Uploader() {
     reader.readAsText(file)
   }
 
+  if (!showUploader && isUploaded) {
+    return (
+      <div className="bc3-uploader-mini">
+        <div className="bc3-file-info">
+          <span className="bc3-file-icon-mini">📄</span>
+          <span className="bc3-file-name">{fileName}</span>
+          <button className="bc3-toggle-btn" onClick={() => setShowUploader(true)} title="Mostrar panel de carga">
+            ⚙️
+          </button>
+        </div>
+        <style jsx>{`
+          .bc3-uploader-mini {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            padding: 8px;
+            margin-bottom: 8px;
+          }
+          
+          .bc3-file-info {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+          }
+          
+          .bc3-file-icon-mini {
+            margin-right: 8px;
+          }
+          
+          .bc3-file-name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+          
+          .bc3-toggle-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 2px;
+            font-size: 12px;
+          }
+        `}</style>
+      </div>
+    )
+  }
+
   return (
     <div className="bc3-uploader">
-      <h3>Cargar archivo BC3</h3>
+      <div className="bc3-uploader-header">
+        <h3>Cargar archivo BC3</h3>
+        {isUploaded && (
+          <button className="bc3-toggle-btn" onClick={() => setShowUploader(false)} title="Ocultar panel de carga">
+            ▲
+          </button>
+        )}
+      </div>
       <div className="bc3-uploader-content">
         <label htmlFor="bc3-file-input" className="bc3-file-label">
           <div className="bc3-file-drop-area">
@@ -58,20 +117,34 @@ export function BC3Uploader() {
         .bc3-uploader {
           background-color: white;
           border-radius: 8px;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          padding: 16px;
-          margin-bottom: 16px;
+          box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+          padding: 12px;
+          margin-bottom: 8px;
+        }
+        
+        .bc3-uploader-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 8px;
         }
         
         .bc3-uploader h3 {
-          margin-top: 0;
-          margin-bottom: 16px;
+          margin: 0;
+          font-size: 14px;
+        }
+        
+        .bc3-toggle-btn {
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 2px 5px;
+          font-size: 12px;
         }
         
         .bc3-uploader-content {
           display: flex;
           flex-direction: column;
-          align-items: center;
         }
         
         .bc3-file-label {
@@ -80,11 +153,14 @@ export function BC3Uploader() {
         }
         
         .bc3-file-drop-area {
-          border: 2px dashed #ccc;
-          border-radius: 8px;
-          padding: 24px;
+          border: 1px dashed #ccc;
+          border-radius: 4px;
+          padding: 10px;
           text-align: center;
           transition: all 0.2s;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         
         .bc3-file-drop-area:hover {
@@ -92,13 +168,13 @@ export function BC3Uploader() {
         }
         
         .bc3-file-icon {
-          font-size: 24px;
-          display: block;
-          margin-bottom: 8px;
+          font-size: 16px;
+          margin-right: 8px;
         }
         
         .bc3-file-text {
           color: #666;
+          font-size: 12px;
         }
         
         .bc3-file-input {
@@ -106,8 +182,10 @@ export function BC3Uploader() {
         }
         
         .bc3-loading {
-          margin-top: 8px;
+          margin-top: 4px;
           color: #666;
+          font-size: 12px;
+          text-align: center;
         }
       `}</style>
     </div>
