@@ -18,8 +18,6 @@ import { Welcome } from './react-components/Welcome';
 
 
 import { IFCViewerOld } from './react-components/IFCViewerOld';
-import { IFCViewerToolbar } from "../BORRAR/IFCViewerToolbar";
-
 BUI.Manager.init()
 
 declare global{
