@@ -1,36 +1,38 @@
 "use client"
 
-import * as React from "react"
-import * as OBC from "@thatopen/components"
-import * as OBCF from "@thatopen/components-front"
-import * as BUI from "@thatopen/ui"
+// Importar los componentes y clases BC3
+import { BC3Provider, useBC3 } from "../classes/BC3Context"
+import { BC3Uploader } from "../components/general/BC3Uploader"
+import { BC3ObjectInfo } from "../components/general/BC3ObjectInfo"
+import React from "react"
+import { ViewerPanel } from "@bim-viewer/core"
+import type { FragmentsGroup } from "@bim-viewer/fragments"
 import * as THREE from "three"
-import type { FragmentsGroup } from "@thatopen/fragments"
-import { createWorld } from "../components/functions/worlds-factory"
-
-//TODOCREATOR
-import { TodoCreator } from "../bim-components/TodoCreator"
-import { ViewerPanel } from "../bim-components/ViewerPanel"
-
-import { AppManager } from "../bim-components"
-import ViewerToolbar from "../components/Toolbars/ViewerToolbar"
-import ProcessModel from "../components/general/ProcessModel"
-import EPP from "../components/Panels/ElementPropertyPanel"
-import WP from "../components/Panels/WorldPanel"
-import TP from "../components/Panels/TreePanel"
-import SV from "../components/Viewer/SplitView"
-
-// BC3 Integration
-import { BC3Provider, useBC3 } from "../contexts/bc3-context"
-import { BC3Uploader } from "../components/bc3-uploader"
-import { BC3ObjectInfo } from "../components/bc3-object-info"
-import type { BC3Data } from "../services/bc3-parser"
-
+import { AppManager, TodoCreator, ProcessModel } from "../classes/AppManager"
+import { createWorld } from "../classes/WorldCreator"
+import * as OBC from "@bim-viewer/core"
+import { ViewerToolbar } from "../components/ViewerToolbar"
+import { ElementPropertyPanel as EPP } from "../components/ElementPropertyPanel"
+import { WorldPanel as WP } from "../components/WorldPanel"
+import { TreePanel as TP } from "../components/TreePanel"
+import { SplitView as SV } from "../components/SplitView"
+import * as BUI from "@bim-viewer/ui"
+import { Highlighter as OBCBFHighlighter } from "@bim-viewer/highlighter"
 interface Props {
   components: OBC.Components
 }
+// Modificar la función IFCViewer para envolver con BC3Provider
+export function IFCViewer(props: Props) {
+  return (
+    <BC3Provider>
+      <IFCViewerInner {...props} />
+    </BC3Provider>
+  )
+}
 
+// Crear una nueva función IFCViewerInner que contenga el código original
 function IFCViewerInner(props: Props) {
+  // Copiar todo el contenido original de IFCViewer aquí
   const components: OBC.Components = props.components
   const viewerPanelRef = React.useRef<ViewerPanel | null>(null)
 
@@ -42,8 +44,8 @@ function IFCViewerInner(props: Props) {
   const [uiInitialized, setUIInitialized] = React.useState(false)
   const setupUIRef = React.useRef<(() => void) | null>(null)
 
-  // BC3 Integration
-  const { setBc3Data, setSelectedObjectId } = useBC3()
+  // Añadir acceso al contexto BC3
+  const { setSelectedObjectId } = useBC3()
 
   let fragmentModel: FragmentsGroup | undefined
   const appManager = components.get(AppManager)
@@ -74,7 +76,7 @@ function IFCViewerInner(props: Props) {
         fragmentModel = model
       })
 
-      const highlighter = components.get(OBCF.Highlighter)
+      const highlighter = components.get(OBCBFHighlighter)
       highlighter.setup({
         selectName: "selectEvent",
         selectEnabled: true,
@@ -86,7 +88,7 @@ function IFCViewerInner(props: Props) {
         world,
       })
 
-      // BC3 Integration: Add event listener for object selection
+      // Añadir evento para capturar la selección de objetos
       highlighter.events.select.onHighlight.add((selection) => {
         if (selection.length > 0) {
           const objectId = selection[0].id
@@ -115,10 +117,6 @@ function IFCViewerInner(props: Props) {
       fragmentModel?.dispose()
     }
   }, [])
-
-  const handleBC3DataLoaded = (data: BC3Data) => {
-    setBc3Data(data)
-  }
 
   const initializeUI = React.useCallback(() => {
     const viewerContainer = document.getElementById("viewer-container")
@@ -214,39 +212,49 @@ function IFCViewerInner(props: Props) {
     }
   }, [mainWorld, uiInitialized, initializeUI])
 
+  // Modificar el return para incluir los componentes BC3
   return (
-    <div className="flex flex-col md:flex-row w-full h-full gap-4">
+    <div className="ifc-bc3-container">
       <div
         id="viewer-container"
-        className="dashboard-card flex-1"
+        className="dashboard-card"
         style={{
           position: "relative",
+          width: "100%",
           height: "95vh",
           minWidth: 0,
           maxWidth: 800,
         }}
       ></div>
-      <div className="flex flex-col gap-4 w-full md:w-96">
-        <BC3Uploader onDataLoaded={handleBC3DataLoaded} />
-        <BC3ObjectInfoContainer />
+      <div className="bc3-sidebar">
+        <BC3Uploader />
+        <BC3ObjectInfo />
       </div>
+      <style jsx>{`
+        .ifc-bc3-container {
+          display: flex;
+          width: 100%;
+          gap: 16px;
+        }
+        
+        .bc3-sidebar {
+          width: 350px;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        
+        @media (max-width: 1200px) {
+          .ifc-bc3-container {
+            flex-direction: column;
+          }
+          
+          .bc3-sidebar {
+            width: 100%;
+          }
+        }
+      `}</style>
     </div>
-  )
-}
-
-// Separate component to use the BC3 context
-function BC3ObjectInfoContainer() {
-  const { bc3Data, selectedObjectId } = useBC3()
-
-  return <BC3ObjectInfo bc3Data={bc3Data} selectedObjectId={selectedObjectId} />
-}
-
-// Wrap the IFCViewer with the BC3Provider
-export function IFCViewer(props: Props) {
-  return (
-    <BC3Provider>
-      <IFCViewerInner {...props} />
-    </BC3Provider>
   )
 }
 
